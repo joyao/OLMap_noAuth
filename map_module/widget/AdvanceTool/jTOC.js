@@ -1,102 +1,100 @@
-﻿var toc = function () {
-
-    var projection = ol.proj.get('EPSG:3857');
+﻿var toc = (function () {
+    var projection = ol.proj.get("EPSG:3857");
 
     var image = new ol.style.Circle({
         radius: 5,
         fill: null,
-        stroke: new ol.style.Stroke({ color: 'red', width: 1 })
+        stroke: new ol.style.Stroke({ color: "red", width: 1 }),
     });
 
     var styles = {
-        'Point': [
+        Point: [
             new ol.style.Style({
-                image: image
-            })
+                image: image,
+            }),
         ],
-        'LineString': [
+        LineString: [
             new ol.style.Style({
                 stroke: new ol.style.Stroke({
-                    color: 'green',
-                    width: 1
-                })
-            })
+                    color: "green",
+                    width: 1,
+                }),
+            }),
         ],
-        'MultiLineString': [
+        MultiLineString: [
             new ol.style.Style({
                 stroke: new ol.style.Stroke({
-                    color: 'green',
-                    width: 1
-                })
-            })
+                    color: "green",
+                    width: 1,
+                }),
+            }),
         ],
-        'MultiPoint': [
+        MultiPoint: [
             new ol.style.Style({
-                image: image
-            })
+                image: image,
+            }),
         ],
-        'MultiPolygon': [
+        MultiPolygon: [
             new ol.style.Style({
                 stroke: new ol.style.Stroke({
-                    color: 'yellow',
-                    width: 1
+                    color: "yellow",
+                    width: 1,
                 }),
                 //多区的填充样式
                 fill: new ol.style.Fill({
-                    color: 'rgba(255, 255, 0, 0.1)'
-                })
-            })
+                    color: "rgba(255, 255, 0, 0.1)",
+                }),
+            }),
         ],
-        'Polygon': [
+        Polygon: [
             new ol.style.Style({
                 stroke: new ol.style.Stroke({
-                    color: 'blue',
+                    color: "blue",
                     lineDash: [4],
-                    width: 3
+                    width: 3,
                 }),
                 fill: new ol.style.Fill({
-                    color: 'rgba(0, 0, 255, 0.1)'
-                })
-            })
+                    color: "rgba(0, 0, 255, 0.1)",
+                }),
+            }),
         ],
-        'GeometryCollection': [
+        GeometryCollection: [
             new ol.style.Style({
                 stroke: new ol.style.Stroke({
-                    color: 'magenta',
-                    width: 2
+                    color: "magenta",
+                    width: 2,
                 }),
                 fill: new ol.style.Fill({
-                    color: 'magenta'
+                    color: "magenta",
                 }),
                 image: new ol.style.Circle({
                     radius: 10,
                     fill: null,
                     stroke: new ol.style.Stroke({
-                        color: 'magenta'
-                    })
-                })
-            })
+                        color: "magenta",
+                    }),
+                }),
+            }),
         ],
-        'Circle': [
+        Circle: [
             new ol.style.Style({
                 stroke: new ol.style.Stroke({
-                    color: 'red',
-                    width: 2
+                    color: "red",
+                    width: 2,
                 }),
                 fill: new ol.style.Fill({
-                    color: 'rgba(255,0,0,0.2)'
-                })
-            })
-        ]
+                    color: "rgba(255,0,0,0.2)",
+                }),
+            }),
+        ],
     };
-
 
     var styleFunction = function (feature, resolution) {
         return styles[feature.getGeometry().getType()];
     };
 
     function initTOCLayer() {
-        var typehasExtent = ['GeoJSON', 'GPX', 'KML'];
+        var typehasExtent = ["GeoJSON", "GPX", "KML"];
         if (TOCArray.length !== 0) {
             console.log(TOCArray);
             var layerlisthtml = "";
@@ -112,22 +110,38 @@
                         checked = false;
                     }
                 }
-                var checkboxhtml = (checked === false ? '<div class="ui checkbox"><input type="checkbox" name="example" onclick="toc.toggleTocLayer(\'' + item.LayerID + '\', this)">' : '<div class="ui checkbox"><input type="checkbox" name="example" onclick="toc.toggleTocLayer(\'' + item.LayerID + '\', this)" checked="' + checked + '">');
-                var layerlisthtml_part = '<div class="item">' + checkboxhtml + '<label></label></div><div class="content"><a class="header">' + item.LayerTitle + '</a><div class="description">' + item.DataType + '</div>';
+                var checkboxhtml =
+                    checked === false
+                        ? '<div class="ui checkbox"><input type="checkbox" name="example" onclick="toc.toggleTocLayer(\'' +
+                          item.LayerID +
+                          "', this)\">"
+                        : '<div class="ui checkbox"><input type="checkbox" name="example" onclick="toc.toggleTocLayer(\'' +
+                          item.LayerID +
+                          '\', this)" checked="' +
+                          checked +
+                          '">';
+                var layerlisthtml_part =
+                    '<div class="item">' +
+                    checkboxhtml +
+                    '<label></label></div><div class="content"><a class="header">' +
+                    item.LayerTitle +
+                    '</a><div class="description">' +
+                    item.DataType +
+                    "</div>";
                 if (typehasExtent.includes(item.DataType)) {
-                    layerlisthtml_part += '<img class="layerBtns info" src="images/TOCpage/info.png" title="點擊定位圖層" onclick="toc.zoomTocLayer(\'' + item.LayerID + '\')">';
+                    layerlisthtml_part +=
+                        '<img class="layerBtns info" src="images/TOCpage/info.png" title="點擊定位圖層" onclick="toc.zoomTocLayer(\'' +
+                        item.LayerID +
+                        "')\">";
                 }
-                layerlisthtml_part += '</div></div>';
+                layerlisthtml_part += "</div></div>";
                 layerlisthtml += layerlisthtml_part;
             });
             $("#layerlist").html(layerlisthtml);
         } else {
             $.ajax({
                 type: "GET",
-                url: config_OLMapWebAPI + "/Layers/getLayerResource",
-                headers: {
-                    "Authorization": localStorage["token"]
-                },
+                url: "https://olmap-28df7-default-rtdb.firebaseio.com/LayerResource.json",
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
                 success: function (d) {
@@ -139,9 +153,25 @@
                     $.each(data, function (index, item) {
                         loadLayer(item);
                         if (typehasExtent.includes(item.DataType)) {
-                            layerlisthtml += '<div class="item"><div class="ui checkbox"><input type="checkbox" name="example" onclick="toc.toggleTocLayer(\'' + item.LayerID + '\', this)"><label></label></div><div class="content"><a class="header">' + item.LayerTitle + '</a><div class="description">' + item.DataType + '</div><img class="layerBtns info" src="images/TOCpage/info.png" title="點擊定位圖層" onclick="toc.zoomTocLayer(\'' + item.LayerID + '\')"></div></div>';
+                            layerlisthtml +=
+                                '<div class="item"><div class="ui checkbox"><input type="checkbox" name="example" onclick="toc.toggleTocLayer(\'' +
+                                item.LayerID +
+                                '\', this)"><label></label></div><div class="content"><a class="header">' +
+                                item.LayerTitle +
+                                '</a><div class="description">' +
+                                item.DataType +
+                                '</div><img class="layerBtns info" src="images/TOCpage/info.png" title="點擊定位圖層" onclick="toc.zoomTocLayer(\'' +
+                                item.LayerID +
+                                "')\"></div></div>";
                         } else {
-                            layerlisthtml += '<div class="item"><div class="ui checkbox"><input type="checkbox" name="example" onclick="toc.toggleTocLayer(\'' + item.LayerID + '\', this)"><label></label></div><div class="content"><a class="header">' + item.LayerTitle + '</a><div class="description">' + item.DataType + '</div></div></div>';
+                            layerlisthtml +=
+                                '<div class="item"><div class="ui checkbox"><input type="checkbox" name="example" onclick="toc.toggleTocLayer(\'' +
+                                item.LayerID +
+                                '\', this)"><label></label></div><div class="content"><a class="header">' +
+                                item.LayerTitle +
+                                '</a><div class="description">' +
+                                item.DataType +
+                                "</div></div></div>";
                         }
                         TOCArray.push(item);
                     });
@@ -149,7 +179,7 @@
                 },
                 error: function (jqXHR, exception) {
                     ajaxError(jqXHR, exception);
-                }
+                },
             });
         }
     }
@@ -163,37 +193,34 @@
         if ($(checkbox).prop("checked")) {
             map.e_getLayer(layerid).setOpacity(1);
             console.log("open layer:" + layerid);
-            TOCArray.filter(i => i.LayerID === layerid)[0].OpenOpacity = "1";
+            TOCArray.filter((i) => i.LayerID === layerid)[0].OpenOpacity = "1";
         } else {
             map.e_getLayer(layerid).setOpacity(0);
             console.log("close layer:" + layerid);
-            TOCArray.filter(i => i.LayerID === layerid)[0].OpenOpacity = "0";
+            TOCArray.filter((i) => i.LayerID === layerid)[0].OpenOpacity = "0";
         }
     }
-
 
     function loadLayer(json) {
         var layer;
         var source;
         if (json.DataType === "WMS") {
-            var Layer_split = json.LayerVisibleCode.split('/');
+            var Layer_split = json.LayerVisibleCode.split("/");
             source = new ol.source.TileWMS({
                 url: json.DataURL,
                 params: {
-                    'map': Layer_split.length === 2 ? Layer_split[0] : '',
-                    'LAYERS': Layer_split[Layer_split.length - 1],
-                    'TILED': true,
-                    'FORMAT': 'image/png',
-                    'VERSION': '1.1.1'
+                    map: Layer_split.length === 2 ? Layer_split[0] : "",
+                    LAYERS: Layer_split[Layer_split.length - 1],
+                    TILED: true,
+                    FORMAT: "image/png",
+                    VERSION: "1.1.1",
                 },
-                serverType: 'geoserver',
+                serverType: "geoserver",
                 // Countries have transparency, so do not fade tiles:
-                transition: 0
-
+                transition: 0,
             });
-
         } else if (json.DataType === "WMTS") {
-            var projection = ol.proj.get('EPSG:3857');
+            var projection = ol.proj.get("EPSG:3857");
             var projectionExtent = projection.getExtent();
             var size = ol.extent.getWidth(projectionExtent) / 256;
             var resolutions = new Array(14);
@@ -207,94 +234,99 @@
             source = new ol.source.WMTS({
                 url: json.DataURL,
                 layer: json.LayerVisibleCode,
-                matrixSet: 'EPSG:3857',
-                format: 'image/png',
+                matrixSet: "EPSG:3857",
+                format: "image/png",
                 projection: projection,
                 tileGrid: new ol.tilegrid.WMTS({
                     origin: ol.extent.getTopLeft(projectionExtent),
                     resolutions: resolutions,
-                    matrixIds: matrixIds
+                    matrixIds: matrixIds,
                 }),
-                style: 'default',
-                wrapX: true
+                style: "default",
+                wrapX: true,
             });
         } else if (json.DataType === "WFS") {
             source = new ol.source.Vector({
                 format: new ol.format.GeoJSON(),
                 url: function (extent) {
-                    return json.DataURL + '?service=WFS&' +
-                        'version=1.1.0&request=GetFeature&typename=' + json.LayerVisibleCode + '&' +
-                        'outputFormat=application/json&srsname=EPSG:3857&' +
-                        'bbox=' + extent.join(',') + ',EPSG:3857';
+                    return (
+                        json.DataURL +
+                        "?service=WFS&" +
+                        "version=1.1.0&request=GetFeature&typename=" +
+                        json.LayerVisibleCode +
+                        "&" +
+                        "outputFormat=application/json&srsname=EPSG:3857&" +
+                        "bbox=" +
+                        extent.join(",") +
+                        ",EPSG:3857"
+                    );
                 },
-                strategy: ol.loadingstrategy.bbox
+                strategy: ol.loadingstrategy.bbox,
             });
-
         } else if (json.DataType === "GeoJSON") {
             source = new ol.source.Vector({
-                url: json.DataURL + '/' + json.LayerVisibleCode,
-                format: new ol.format.GeoJSON()
+                url: json.DataURL + "/" + json.LayerVisibleCode,
+                format: new ol.format.GeoJSON(),
             });
         } else if (json.DataType === "KML") {
             source = new ol.source.Vector({
-                url: json.DataURL + '/' + json.LayerVisibleCode,
-                format: new ol.format.KML()
+                url: json.DataURL + "/" + json.LayerVisibleCode,
+                format: new ol.format.KML(),
             });
         } else if (json.DataType === "GPX") {
-
             source = new ol.source.Vector({
-                url: json.DataURL + '/' + json.LayerVisibleCode,
-                format: new ol.format.GPX()
+                url: json.DataURL + "/" + json.LayerVisibleCode,
+                format: new ol.format.GPX(),
             });
         }
         if (json.LayerType === "Tile") {
             layer = new ol.layer.Tile({
                 opacity: 0,
-                source: source
+                source: source,
             });
         } else if (json.LayerType === "Vector") {
             layer = new ol.layer.Vector({
                 source: source,
-                style: styleFunction
+                style: styleFunction,
             });
         } else if (json.LayerType === "Heatmap") {
             layer = new ol.layer.Heatmap({
                 source: source,
                 blur: parseInt(15, 10),
-                radius: parseInt(2, 10)
+                radius: parseInt(2, 10),
             });
         } else if (json.LayerType === "Cluster") {
             var styleCache = {};
             layer = new ol.layer.Vector({
                 source: new ol.source.Cluster({
                     distance: parseInt(30, 10),
-                    source: source
+                    source: source,
                 }),
                 style: function (feature) {
-                    var size = feature.get('features').length;
+                    var size = feature.get("features").length;
                     var style = styleCache[size];
                     if (!style) {
                         style = new ol.style.Style({
                             image: new ol.style.Circle({
                                 radius: 15,
                                 stroke: new ol.style.Stroke({
-                                    color: '#fff'
+                                    color: "#fff",
                                 }),
                                 fill: new ol.style.Fill({
-                                    color: '#3E5E7E'
-                                })
+                                    color: "#3E5E7E",
+                                }),
                             }),
                             text: new ol.style.Text({
                                 text: size.toString(),
                                 fill: new ol.style.Fill({
-                                    color: '#fff'
-                                })
-                            })
+                                    color: "#fff",
+                                }),
+                            }),
                         });
                         styleCache[size] = style;
                     }
                     return style;
-                }
+                },
             });
         }
         layer.id = json.LayerID;
@@ -305,6 +337,6 @@
     return {
         initTOCLayer: initTOCLayer,
         toggleTocLayer: toggleTocLayer,
-        zoomTocLayer: zoomTocLayer
+        zoomTocLayer: zoomTocLayer,
     };
-}();
+})();

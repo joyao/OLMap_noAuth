@@ -1,0 +1,74 @@
+[
+    {
+        "ID": "1",
+        "LayerTitle": "各級學校範圍圖",
+        "LayerType": "Tile",
+        "DataType": "WMS",
+        "DataURL": "https://wms.nlsc.gov.tw/wms",
+        "LayerVisibleCode": "SCHOOL"
+    },
+    {
+        "ID": "2",
+        "LayerTitle": "縣市界",
+        "LayerType": "Tile",
+        "DataType": "WMS",
+        "DataURL": "http://localhost/qgis/wms?",
+        "LayerVisibleCode": "COUNTY_MOI"
+    },
+    {
+        "ID": "3",
+        "LayerTitle": "段籍圖",
+        "LayerType": "Tile",
+        "DataType": "WMTS",
+        "DataURL": "https://wmts.nlsc.gov.tw/wmts",
+        "LayerVisibleCode": "LANDSECT"
+    },
+    {
+        "ID": "4",
+        "LayerTitle": "水域區域",
+        "LayerType": "Vector",
+        "DataType": "WFS",
+        "DataURL": "https://ahocevar.com/geoserver/wfs",
+        "LayerVisibleCode": "osm:water_areas"
+    },
+    {
+        "ID": "5",
+        "LayerTitle": "土石流潛勢溪流影響範圍圖",
+        "LayerType": "Vector",
+        "DataType": "GeoJSON",
+        "DataURL": "data/GeoJSON",
+        "LayerVisibleCode": "DebrisArea.Geojson"
+    },
+    {
+        "ID": "6",
+        "LayerTitle": "土石流潛勢溪流基本資料",
+        "LayerType": "Vector",
+        "DataType": "KML",
+        "DataURL": "data/KML",
+        "LayerVisibleCode": "Debris.kml"
+    },
+    {
+        "ID": "7",
+        "LayerTitle": "GPX測試資料",
+        "LayerType": "Vector",
+        "DataType": "GPX",
+        "DataURL": "data/GPX",
+        "LayerVisibleCode": "fells_loop.gpx"
+    },
+    {
+        "ID": "8",
+        "LayerTitle": "iTaiwan熱點熱區圖",
+        "LayerType": "Heatmap",
+        "DataType": "GeoJSON",
+        "DataURL": "data/GeoJSON",
+        "LayerVisibleCode": "itwgeo.json"
+    },
+    {
+        "ID": "9",
+        "LayerTitle": "iTaiwan熱點聚合圖",
+        "LayerType": "Cluster",
+        "DataType": "GeoJSON",
+        "DataURL": "data/GeoJSON",
+        "LayerVisibleCode": "itwgeo.json"
+    }
+]

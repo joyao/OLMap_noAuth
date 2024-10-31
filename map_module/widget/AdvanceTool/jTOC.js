@@ -141,7 +141,7 @@
         } else {
             $.ajax({
                 type: "GET",
-                url: "https://olmap-28df7-default-rtdb.firebaseio.com/LayerResource.json",
+                url: "./data/LayerResource.json",
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
                 success: function (d) {
